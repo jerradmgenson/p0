@@ -1,0 +1,47 @@
+IAdd. Exp ::= Exp "+" Exp ;
+ISub. Exp ::= Exp "-" Exp ;
+IMul. Exp ::= Exp "*" Exp ;
+IDiv. Exp ::= Exp "/" Exp ;
+FAdd. Exp ::= Exp "+." Exp ;
+FSub. Exp ::= Exp "-." Exp ;
+FMul. Exp ::= Exp "*." Exp ;
+FDiv. Exp ::= Exp "/." Exp ;
+PUnion. Exp ::= Exp "|" Exp ;
+PIsect. Exp ::= Exp "&" Exp ;
+PComp. Exp ::= "~" Exp ;
+PTrialUnion. Exp ::= Exp "?" Exp ;
+LOr. Exp ::= Exp "or" Exp ;
+LAnd. Exp ::= Exp "and" Exp ;
+LNeg. Exp ::= "not" Exp ;
+
+EInt. Exp ::= Integer ;
+EFloat. Exp ::= Float ;
+EProb. Exp ::= Prob ;
+EBool. Exp ::= Bool ;
+ENeg. Exp ::= "-" Exp ;
+EEq. Exp ::= Exp "=" Exp ;
+ELt. Exp ::= Exp "<" Exp ;
+EGt. Exp ::= Exp ">" Exp ;
+ELe. Exp ::= Exp "<=" Exp ;
+EGe. Exp ::= Exp ">=" Exp ;
+
+EAssign. Exp ::= EIdent ":=" Exp ;
+right ":=" ;
+ECond. Exp ::= "(" "if" Exp "then" Exp "else" Exp ")" ;
+EWhile. Exp ::= "(" "while" Exp "do" Exp ")" ;
+EFor. Exp ::= "(" "for" EIdent "in" Exp "do" Exp ")" ;
+EIdent. Exp ::= Ident ;
+ArgList. ArgList ::= Exp ("," Exp)* ","? ;
+EFunCall. Exp ::= "(" EIdent ArgList? ")" ;
+ParamList. ParamList ::= EIdent ("," EIdent)* ","? ;
+EFunDef. Exp ::= "(" "fun" ParamList? ":" Exp ")" ;
+EExpList. Exp ::= "(" Exp ("," Exp)* ")" ;
+EArray. Exp ::= "[" ArgList? "]" ;
+
+entrypoints Exp ;
+
+token Integer (digit+);
+token Float (Integer . Integer?);
+token Prob (p Float);
+token Bool ("true" | "false");
+token Ident ((letter | "_") (letter | digit | "_")*) ;
