@@ -1,3 +1,5 @@
+// Arithmetic Operators
+ANeg. Exp ::= "-" Exp ;
 IAdd. Exp ::= Exp "+" Exp ;
 ISub. Exp ::= Exp "-" Exp ;
 IMul. Exp ::= Exp "*" Exp ;
@@ -6,42 +8,78 @@ FAdd. Exp ::= Exp "+." Exp ;
 FSub. Exp ::= Exp "-." Exp ;
 FMul. Exp ::= Exp "*." Exp ;
 FDiv. Exp ::= Exp "/." Exp ;
+
+// Probability Operators
+PTrialUnion. Exp ::= Exp "?" Exp ;
+PComp. Exp ::= "~" Exp ;
 PUnion. Exp ::= Exp "|" Exp ;
 PIsect. Exp ::= Exp "&" Exp ;
-PComp. Exp ::= "~" Exp ;
-PTrialUnion. Exp ::= Exp "?" Exp ;
+
+// Logical Operators
 LOr. Exp ::= Exp "or" Exp ;
 LAnd. Exp ::= Exp "and" Exp ;
 LNeg. Exp ::= "not" Exp ;
 
-EInt. Exp ::= Integer ;
-EFloat. Exp ::= Float ;
-EProb. Exp ::= Prob ;
-EBool. Exp ::= Bool ;
-ENeg. Exp ::= "-" Exp ;
+// Comparison Operators
 EEq. Exp ::= Exp "=" Exp ;
 ELt. Exp ::= Exp "<" Exp ;
 EGt. Exp ::= Exp ">" Exp ;
 ELe. Exp ::= Exp "<=" Exp ;
 EGe. Exp ::= Exp ">=" Exp ;
 
+// Unary Expressions
+EUnary. Exp ::= ANeg | LNeg | PComp | EPrimary ;
+
+// Precedence Levels for Complex Expressions
+EMul. Exp ::= Exp "*" Exp | Exp "/" Exp | Exp "*." Exp | Exp "/." Exp ;
+EAdd. Exp ::= Exp "+" Exp | Exp "-" Exp | Exp "+." Exp | Exp "-." Exp ;
+Exp ::= PTrialUnion | PIsect | PUnion | EAdd | EMul | EUnary ;
+
+// Base Expressions and Primary
+EPrimary. Exp ::= EInt | EFloat | EProb | EBool | EIdent | "(" Exp ")" ;
+
+// Assignments
 EAssign. Exp ::= EIdent ":=" Exp ;
 right ":=" ;
+
+// Conditional Expressions
 ECond. Exp ::= "(" "if" Exp "then" Exp "else" Exp ")" ;
+
+// Loops
 EWhile. Exp ::= "(" "while" Exp "do" Exp ")" ;
 EFor. Exp ::= "(" "for" EIdent "in" Exp "do" Exp ")" ;
-EIdent. Exp ::= Ident ;
-ArgList. ArgList ::= Exp ("," Exp)* ","? ;
-EFunCall. Exp ::= "(" EIdent ArgList? ")" ;
-ParamList. ParamList ::= EIdent ("," EIdent)* ","? ;
+
+// Function Definitions and Calls
 EFunDef. Exp ::= "(" "fun" ParamList? ":" Exp ")" ;
+EFunCall. Exp ::= "(" EIdent ArgList? ")" ;
+
+// Lists
+ArgList. ArgList ::= Exp ("," Exp)* ","? ;
+ParamList. ParamList ::= EIdent ("," EIdent)* ","? ;
 EExpList. Exp ::= "(" Exp ("," Exp)* ")" ;
+
+// Arrays
 EArray. Exp ::= "[" ArgList? "]" ;
 
-entrypoints Exp ;
+// Literals
+EInt. Exp ::= Integer ;
+EFloat. Exp ::= Float ;
+EProb. Exp ::= Prob ;
+EBool. Exp ::= Bool ;
 
-token Integer (digit+);
-token Float (Integer . Integer?);
-token Prob (p Float);
-token Bool ("true" | "false");
+// Identifiers
+EIdent. Exp ::= Ident ;
+
+// Comments
+comment "##" "##" ;
+comment "#" ;
+
+// Tokens
+token Integer (digit+) ;
+token Float (Integer . Integer?) ;
+token Prob (p Float) ;
+token Bool ("true" | "false") ;
 token Ident ((letter | "_") (letter | digit | "_")*) ;
+
+// Entrypoints
+entrypoints Exp ;
